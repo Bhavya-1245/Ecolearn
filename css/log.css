@@ -1,0 +1,218 @@
+:root {
+    --primary: #4CAF50;
+    --primary-light: #80e27e;
+    --primary-dark: #087f23;
+    --school-color: #9C27B0;
+    --college-color: #2196F3;
+    --user-color: #4CAF50;
+    --background: #f9fbe7;
+    --surface: #ffffff;
+    --text: #263238;
+    --text-light: #78909c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(120deg, #f9fbe7 0%, #e8f5e9 100%);
+    color: var(--text);
+}
+
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.logo i {
+    font-size: 2rem;
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.welcome-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+}
+
+.welcome-section p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.login-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 1.5rem;
+    text-align: center;
+    color: white;
+}
+
+.school-card .card-header {
+    background: linear-gradient(135deg, var(--school-color) 0%, #7B1FA2 100%);
+}
+
+.college-card .card-header {
+    background: linear-gradient(135deg, var(--college-color) 0%, #1976D2 100%);
+}
+
+.card-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.card-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.card-subtitle { font-size: 0.9rem; opacity: 0.9; }
+
+.card-body { padding: 1.5rem; }
+
+.form-group { margin-bottom: 1.2rem; }
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    color: var(--text-light);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 2px solid var(--background);
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: var(--background);
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.role-selection {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+    background: var(--background);
+    padding: 0.5rem;
+    border-radius: 10px;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.school-card .role-btn.active { background: var(--school-color); color: white; }
+.college-card .role-btn.active { background: var(--college-color); color: white; }
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-container { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; color: var(--text); }
+.checkbox-container input { position: absolute; opacity: 0; cursor: pointer; }
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: var(--background);
+    border: 2px solid var(--background);
+    border-radius: 5px;
+    margin-right: 8px;
+    position: relative;
+}
+.checkbox-container input:checked ~ .checkmark { background-color: var(--primary); border-color: var(--primary); }
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.checkbox-container input:checked ~ .checkmark:after { display: block; }
+.checkbox-container .checkmark:after {
+    left: 6px; top: 2px; width: 5px; height: 10px;
+    border: solid white; border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.forgot-password { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+.forgot-password:hover { text-decoration: underline; }
+
+.btn { padding: 12px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; width: 100%; }
+.school-card .btn-primary { background-color: var(--school-color); color: white; }
+.school-card .btn-primary:hover { background-color: #7B1FA2; transform: translateY(-2px); }
+.college-card .btn-primary { background-color: var(--college-color); color: white; }
+.college-card .btn-primary:hover { background-color: #1976D2; transform: translateY(-2px); }
+
+.footer { text-align: center; padding: 2rem; margin-top: 2rem; color: var(--text-light); font-size: 0.9rem; }
+
+@media screen and (max-width: 768px) {
+    .login-container { flex-direction: column; align-items: center; }
+    .login-card { width: 100%; max-width: 400px; }
+    .welcome-section h1 { font-size: 2rem; }
+    .welcome-section p { font-size: 1rem; }
+}

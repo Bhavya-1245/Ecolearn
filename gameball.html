@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Planter Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #1a2980, #26d0ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        #game-container {
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        #level-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+        
+        #time-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+        
+        #score-display {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+        
+        #lives-container {
+            display: flex;
+        }
+        
+        .life {
+            width: 30px;
+            height: 30px;
+            background: #ff5252;
+            margin-left: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 82, 82, 0.7);
+        }
+        
+        #player {
+            width: 60px;
+            height: 80px;
+            position: absolute;
+            bottom: 100px;
+            left: 100px;
+            z-index: 5;
+            transition: transform 0.2s;
+        }
+        
+        .player-body {
+            width: 50px;
+            height: 50px;
+            background: #3498db;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+        }
+        
+        .player-head {
+            width: 40px;
+            height: 40px;
+            background: #ffdbac;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 45px;
+            left: 10px;
+            box-shadow: 0 -3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .player-eye {
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+        }
+        
+        .player-eye.left {
+            left: 10px;
+        }
+        
+        .player-eye.right {
+            right: 10px;
+        }
+        
+        .player-mouth {
+            width: 15px;
+            height: 5px;
+            background: #e74c3c;
+            border-radius: 0 0 8px 8px;
+            position: absolute;
+            bottom: 8px;
+            left: 12px;
+        }
+        
+        .player-leg {
+            width: 12px;
+            height: 25px;
+            background: #3498db;
+            position: absolute;
+            bottom: -15px;
+        }
+        
+        .player-leg.left {
+            left: 15px;
+            transform: rotate(5deg);
+        }
+        
+        .player-leg.right {
+            right: 15px;
+            transform: rotate(-5deg);
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, #8B4513, #5D4037);
+            border-top: 5px solid #795548;
+            z-index: 2;
+        }
+        
+        .grass {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(76, 175, 80, 0.3));
+            z-index: 3;
+        }
+        
+        .plant-spot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #795548;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .plant {
+            position: absolute;
+            z-index: 3;
+            transition: transform 0.5s;
+        }
+        
+        .tree {
+            width: 60px;
+            height: 100px;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            border-radius: 30% 30% 50% 50%;
+            position: relative;
+        }
+        
+        .tree::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            border-radius: 50%;
+            bottom: 60px;
+            left: -10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .flower {
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(to bottom, #81C784, #4CAF50);
+            border-radius: 40% 40% 50% 50%;
+            position: relative;
+        }
+        
+        .flower::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #FFEB3B;
+            border-radius: 50%;
+            bottom: 40px;
+            left: 5px;
+            box-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
+        }
+        
+        .flower::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #E91E63;
+            border-radius: 50%;
+            bottom: 45px;
+            left: 10px;
+        }
+        
+        .obstacle {
+            position: absolute;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .no2 {
+            background: linear-gradient(to bottom, #f44336, #b71c1c);
+            width: 60px;
+            height: 60px;
+        }
+        
+        .so2 {
+            background: linear-gradient(to bottom, #9c27b0, #4a148c);
+            width: 60px;
+            height: 60px;
+        }
+        
+        .no {
+            background: linear-gradient(to bottom, #ff9800, #e65100);
+            width: 60px;
+            height: 60px;
+        }
+        
+        .co {
+            background: linear-gradient(to bottom, #795548, #3e2723);
+            width: 60px;
+            height: 60px;
+        }
+        
+        #start-screen, #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 20;
+            text-align: center;
+        }
+        
+        #game-over {
+            display: none;
+        }
+        
+        h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+            letter-spacing: 2px;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 22px;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(76, 175, 80, 0.9);
+        }
+        
+        p {
+            font-size: 20px;
+            max-width: 80%;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        #instructions {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .environment-bar {
+            position: absolute;
+            bottom: 110px;
+            left: 15px;
+            width: 200px;
+            height: 20px;
+            background: #555;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        #environment-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            transition: width 0.5s;
+            border-radius: 8px;
+        }
+        
+        #environment-label {
+            position: absolute;
+            bottom: 135px;
+            left: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            opacity: 0.8;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cloud-1 {
+            width: 120px;
+            height: 50px;
+            top: 50px;
+            left: 100px;
+        }
+        
+        .cloud-2 {
+            width: 90px;
+            height: 40px;
+            top: 80px;
+            left: 250px;
+        }
+        
+        .cloud-3 {
+            width: 140px;
+            height: 55px;
+            top: 40px;
+            right: 100px;
+        }
+        
+        .sun {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #ffeb3b, #ffc107);
+            border-radius: 50%;
+            top: 30px;
+            right: 50px;
+            box-shadow: 0 0 30px rgba(255, 235, 59, 0.8);
+            z-index: 1;
+        }
+        
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(600px);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div class="sun"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        
+        <div id="game-ui">
+            <div id="level-display">Level: 1</div>
+            <div id="time-display">Time: 60s</div>
+            <div id="score-display">Score: 0</div>
+            <div id="lives-container">
+                <div class="life"></div>
+                <div class="life"></div>
+                <div class="life"></div>
+            </div>
+        </div>
+        
+        <div id="environment-label">Environment Health</div>
+        <div class="environment-bar">
+            <div id="environment-fill"></div>
+        </div>
+        
+        <div class="ground"></div>
+        <div class="grass"></div>
+        
+        <div id="player">
+            <div class="player-body"></div>
+            <div class="player-head">
+                <div class="player-eye left"></div>
+                <div class="player-eye right"></div>
+                <div class="player-mouth"></div>
+            </div>
+            <div class="player-leg left"></div>
+            <div class="player-leg right"></div>
+        </div>
+        
+        <div id="start-screen">
+            <h1>Eco-Planter</h1>
+            <p>Help the boy plant trees and flowers to restore the environment!</p>
+            <p>Avoid pollutants and waste that harm the ecosystem.</p>
+            <div id="instructions">
+                <p>Use Arrow Keys to move the character</p>
+                <p>Press SPACE to plant when standing on a brown spot</p>
+                <p>Complete each level before time runs out</p>
+            </div>
+            <button id="start-button">Start Game</button>
+        </div>
+        
+        <div id="game-over">
+            <h1 id="game-outcome">Game Over</h1>
+            <p id="final-score">Your score: 0</p>
+            <p id="game-message">The environment needs more help!</p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameContainer = document.getElementById('game-container');
+            const player = document.getElementById('player');
+            const startScreen = document.getElementById('start-screen');
+            const gameOverScreen = document.getElementById('game-over');
+            const startButton = document.getElementById('start-button');
+            const restartButton = document.getElementById('restart-button');
+            const levelDisplay = document.getElementById('level-display');
+            const timeDisplay = document.getElementById('time-display');
+            const scoreDisplay = document.getElementById('score-display');
+            const environmentFill = document.getElementById('environment-fill');
+            const finalScore = document.getElementById('final-score');
+            const gameOutcome = document.getElementById('game-outcome');
+            const gameMessage = document.getElementById('game-message');
+            
+            let gameActive = false;
+            let playerX = 100;
+            let playerSpeed = 5;
+            let score = 0;
+            let lives = 3;
+            let environmentHealth = 50;
+            let level = 1;
+            let timeLeft = 60;
+            let gameTimer;
+            let obstacleTimer;
+            let obstacles = [];
+            let plantSpots = [];
+            let plants = [];
+            let keys = {};
+            
+            // Game initialization
+            function initGame() {
+                gameActive = true;
+                score = 0;
+                lives = 3;
+                environmentHealth = 50;
+                level = 1;
+                timeLeft = 60;
+                playerX = 100;
+                obstacles = [];
+                plantSpots = [];
+                plants = [];
+                
+                // Clear any existing obstacles and plants
+                document.querySelectorAll('.obstacle, .plant, .plant-spot').forEach(el => el.remove());
+                
+                updateDisplays();
+                generatePlantSpots();
+                startGameTimer();
+                startObstacleTimer();
+                
+                // Update lives display
+                const livesContainer = document.getElementById('lives-container');
+                livesContainer.innerHTML = '';
+                for (let i = 0; i < lives; i++) {
+                    const life = document.createElement('div');
+                    life.className = 'life';
+                    livesContainer.appendChild(life);
+                }
+                
+                // Add bounce animation to player
+                player.classList.add('bounce');
+            }
+            
+            // Generate plant spots on the ground
+            function generatePlantSpots() {
+                // Clear existing plant spots
+                document.querySelectorAll('.plant-spot').forEach(spot => spot.remove());
+                plantSpots = [];
+                
+                const spotCount = 5 + level * 2;
+                for (let i = 0; i < spotCount; i++) {
+                    const spot = document.createElement('div');
+                    spot.className = 'plant-spot';
+                    
+                    // Random position along the ground
+                    const x = Math.random() * (gameContainer.offsetWidth - 100) + 50;
+                    
+                    spot.style.left = x + 'px';
+                    spot.style.bottom = '100px';
+                    
+                    gameContainer.appendChild(spot);
+                    plantSpots.push({ element: spot, x: x, planted: false });
+                }
+            }
+            
+            // Generate environmental obstacles (falling from top)
+            function generateObstacle() {
+                if (!gameActive) return;
+                
+                const obstacle = document.createElement('div');
+                obstacle.className = 'obstacle';
+                
+                // Randomly choose between different pollutants
+                const types = ['no2', 'so2', 'no', 'co'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                obstacle.classList.add(type);
+                
+                // Set the chemical symbol
+                let symbol = '';
+                switch(type) {
+                    case 'no2': symbol = 'NO₂'; break;
+                    case 'so2': symbol = 'SO₂'; break;
+                    case 'no': symbol = 'NO'; break;
+                    case 'co': symbol = 'CO'; break;
+                }
+                obstacle.innerHTML = symbol;
+                
+                // Random horizontal position
+                const x = Math.random() * (gameContainer.offsetWidth - 100) + 50;
+                
+                obstacle.style.left = x + 'px';
+                obstacle.style.top = '-70px';
+                
+                gameContainer.appendChild(obstacle);
+                
+                // Animate the obstacle falling
+                const fallSpeed = 2 + level * 0.5; // Increase speed with level
+                let obstacleY = -70;
+                
+                const fallInterval = setInterval(() => {
+                    if (!gameActive) {
+                        clearInterval(fallInterval);
+                        return;
+                    }
+                    
+                    obstacleY += fallSpeed;
+                    obstacle.style.top = obstacleY + 'px';
+                    
+                    // Check if obstacle reached the bottom
+                    if (obstacleY > gameContainer.offsetHeight - 170) {
+                        clearInterval(fallInterval);
+                        obstacle.remove();
+                    }
+                    
+                    // Check for collision with player
+                    const obstacleRect = obstacle.getBoundingClientRect();
+                    const playerRect = player.getBoundingClientRect();
+                    
+                    if (isColliding(obstacleRect, playerRect)) {
+                        clearInterval(fallInterval);
+                        handleCollision(obstacle);
+                    }
+                }, 20);
+                
+                obstacles.push({ element: obstacle, y: obstacleY, interval: fallInterval });
+            }
+            
+            // Start the obstacle timer
+            function startObstacleTimer() {
+                clearInterval(obstacleTimer);
+                // Generate obstacles more frequently as level increases
+                const interval = 2000 - (level * 150);
+                obstacleTimer = setInterval(() => {
+                    generateObstacle();
+                }, Math.max(500, interval)); // Don't go below 500ms
+            }
+            
+            // Start the game timer
+            function startGameTimer() {
+                clearInterval(gameTimer);
+                gameTimer = setInterval(() => {
+                    timeLeft--;
+                    timeDisplay.textContent = `Time: ${timeLeft}s`;
+                    
+                    if (timeLeft <= 0) {
+                        endGame(false);
+                    }
+                }, 1000);
+            }
+            
+            // Update all displays
+            function updateDisplays() {
+                levelDisplay.textContent = `Level: ${level}`;
+                timeDisplay.textContent = `Time: ${timeLeft}s`;
+                scoreDisplay.textContent = `Score: ${score}`;
+                environmentFill.style.width = `${environmentHealth}%`;
+                
+                // Change environment color based on health
+                if (environmentHealth > 70) {
+                    environmentFill.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A)';
+                } else if (environmentHealth > 30) {
+                    environmentFill.style.background = 'linear-gradient(to right, #CDDC39, #FFEB3B)';
+                } else {
+                    environmentFill.style.background = 'linear-gradient(to right, #FF9800, #F44336)';
+                }
+            }
+            
+            // Handle collision with obstacle
+            function handleCollision(obstacle) {
+                // Remove obstacle
+                obstacle.remove();
+                
+                // Decrease environment health and score
+                environmentHealth -= 8;
+                score = Math.max(0, score - 15);
+                
+                // Visual feedback
+                player.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    player.style.transform = 'scale(1)';
+                }, 300);
+                
+                if (environmentHealth <= 0) {
+                    lives--;
+                    environmentHealth = 50;
+                    
+                    // Update lives display
+                    const livesContainer = document.getElementById('lives-container');
+                    if (livesContainer.children.length > 0) {
+                        livesContainer.removeChild(livesContainer.lastChild);
+                    }
+                    
+                    if (lives <= 0) {
+                        endGame(false);
+                    }
+                }
+                
+                updateDisplays();
+            }
+            
+            // Check if two elements are colliding
+            function isColliding(rect1, rect2) {
+                return !(
+                    rect1.right < rect2.left ||
+                    rect1.left > rect2.right ||
+                    rect1.bottom < rect2.top ||
+                    rect1.top > rect2.bottom
+                );
+            }
+            
+            // Plant vegetation at current position if on a spot
+            function plantVegetation() {
+                let planted = false;
+                
+                plantSpots.forEach(spot => {
+                    if (spot.planted) return;
+                    
+                    const spotRect = spot.element.getBoundingClientRect();
+                    const playerRect = player.getBoundingClientRect();
+                    
+                    if (isColliding(spotRect, playerRect)) {
+                        spot.planted = true;
+                        spot.element.style.display = 'none';
+                        
+                        // Create plant
+                        const plant = document.createElement('div');
+                        
+                        // Randomly choose between tree and flower
+                        if (Math.random() > 0.5) {
+                            plant.className = 'plant tree';
+                        } else {
+                            plant.className = 'plant flower';
+                        }
+                        
+                        plant.style.left = (spot.x - 10) + 'px';
+                        plant.style.bottom = '100px';
+                        
+                        gameContainer.appendChild(plant);
+                        plants.push(plant);
+                        
+                        // Increase score and environment health
+                        score += 25;
+                        environmentHealth += 8;
+                        if (environmentHealth > 100) environmentHealth = 100;
+                        
+                        updateDisplays();
+                        planted = true;
+                        
+                        // Check if all spots are planted
+                        checkLevelCompletion();
+                    }
+                });
+                
+                return planted;
+            }
+            
+            // Check if all planting spots have been used
+            function checkLevelCompletion() {
+                const allPlanted = plantSpots.every(spot => spot.planted);
+                
+                if (allPlanted) {
+                    // Level complete!
+                    score += timeLeft * 5; // Bonus points for remaining time
+                    level++;
+                    
+                    // Increase difficulty
+                    timeLeft = 60 - (level * 5);
+                    if (timeLeft < 20) timeLeft = 20;
+                    
+                    generatePlantSpots();
+                    startObstacleTimer(); // Update obstacle frequency
+                    updateDisplays();
+                }
+            }
+            
+            // End the game
+            function endGame(victory) {
+                gameActive = false;
+                clearInterval(gameTimer);
+                clearInterval(obstacleTimer);
+                
+                // Stop all obstacle animations
+                obstacles.forEach(obs => {
+                    clearInterval(obs.interval);
+                });
+                
+                player.classList.remove('bounce');
+                
+                gameOverScreen.style.display = 'flex';
+                finalScore.textContent = `Your score: ${score}`;
+                
+                if (victory) {
+                    gameOutcome.textContent = 'You Win!';
+                    gameMessage.textContent = 'You successfully restored the environment!';
+                } else {
+                    gameOutcome.textContent = 'Game Over';
+                    gameMessage.textContent = 'The environment needs more help!';
+                }
+            }
+            
+            // Game loop
+            function gameLoop() {
+                if (!gameActive) return;
+                
+                // Move player based on key presses
+                if (keys['ArrowLeft'] && playerX > 10) {
+                    playerX -= playerSpeed;
+                }
+                if (keys['ArrowRight'] && playerX < gameContainer.offsetWidth - 60) {
+                    playerX += playerSpeed;
+                }
+                
+                // Update player position
+                player.style.left = playerX + 'px';
+                
+                // Check for collisions with plant spots
+                plantSpots.forEach(spot => {
+                    if (spot.planted) return;
+                    
+                    const spotRect = spot.element.getBoundingClientRect();
+                    const playerRect = player.getBoundingClientRect();
+                    
+                    if (isColliding(spotRect, playerRect)) {
+                        // Show that player can plant here
+                        spot.element.style.boxShadow = '0 0 15px 5px yellow';
+                    } else {
+                        spot.element.style.boxShadow = 'none';
+                    }
+                });
+                
+                requestAnimationFrame(gameLoop);
+            }
+            
+            // Event listeners
+            document.addEventListener('keydown', function(e) {
+                keys[e.key] = true;
+                
+                // Space bar to plant
+                if (e.key === ' ' && gameActive) {
+                    if (plantVegetation()) {
+                        // Play planting sound (pseudo-code)
+                        // playSound('plant');
+                    }
+                }
+            });
+            
+            document.addEventListener('keyup', function(e) {
+                keys[e.key] = false;
+            });
+            
+            startButton.addEventListener('click', function() {
+                startScreen.style.display = 'none';
+                initGame();
+                gameLoop();
+            });
+            
+            restartButton.addEventListener('click', function() {
+                gameOverScreen.style.display = 'none';
+                initGame();
+                gameLoop();
+            });
+            
+            // Initial setup
+            player.style.left = playerX + 'px';
+        });
+    </script>
+</body>
+</html>

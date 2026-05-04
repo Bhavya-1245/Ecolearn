@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLearn - Redeem Rewards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-light: #80e27e;
+            --primary-dark: #087f23;
+            --secondary: #FF9800;
+            --secondary-light: #ffc947;
+            --secondary-dark: #c66900;
+            --accent: #2196F3;
+            --accent-light: #6ec6ff;
+            --accent-dark: #0069c0;
+            --text: #263238;
+            --text-light: #78909c;
+            --background: #f9fbe7;
+            --surface: #ffffff;
+            --error: #f44336;
+            --success: #66bb6a;
+            --warning: #ffa726;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--background);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .nav-logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin-left: 1.5rem;
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-light);
+        }
+
+        .points-badge {
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            margin-left: 6px;
+        }
+
+        .logout-link {
+            color: #e53935 !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--surface);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--background);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            background-color: var(--background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .profile-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .profile-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav .nav-item {
+            margin: 0;
+        }
+
+        .sidebar-nav .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-nav .nav-item a i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav .nav-item a:hover {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-nav .nav-item.active a {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--background);
+        }
+
+        .eco-points h4 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .points-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .redeem-btn {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-content h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .welcome-content p {
+            opacity: 0.9;
+        }
+
+        .welcome-stats {
+            display: flex;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--primary-dark);
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        /* Rewards Section */
+        .rewards-section {
+            margin-bottom: 2rem;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reward-card {
+            background: var(--surface);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .reward-image {
+            position: relative;
+            height: 160px;
+            overflow: hidden;
+        }
+
+        .reward-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reward-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .reward-content {
+            padding: 1.5rem;
+        }
+
+        .reward-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .reward-content p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .reward-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .points-cost {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .reward-availability {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-disabled {
+            background-color: var(--text-light);
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .btn-disabled:hover {
+            background-color: var(--text-light);
+            transform: none;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--background);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        /* Redeem Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .reward-details {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--background);
+            border-radius: 8px;
+        }
+
+        .reward-details h4 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .reward-details ul {
+            padding-left: 20px;
+        }
+
+        .reward-details li {
+            margin-bottom: 8px;
+        }
+
+        /* Redeemed Rewards Section */
+        .redeemed-section {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .redeemed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .redeemed-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--background);
+        }
+
+        .redeemed-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .redeemed-icon i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .redeemed-content {
+            flex: 1;
+        }
+
+        .redeemed-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .redeemed-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .redeemed-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .redeemed-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(255, 167, 38, 0.2);
+            color: var(--warning);
+        }
+
+        .status-delivered {
+            background: rgba(102, 187, 106, 0.2);
+            color: var(--success);
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                display: flex;
+                flex-direction: column;
+                background-color: var(--primary);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 1.5rem 0;
+            }
+            
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            .rewards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .modal-buttons {
+                flex-direction: column;
+            }
+            
+            .modal-buttons .btn {
+                width: 100%;
+            }
+            
+            .redeemed-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .redeemed-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .redeemed-status {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>EcoLearn</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+                <li class="nav-item"><a href="#games" class="nav-link">Games & Quizzes</a></li>
+                <li class="nav-item"><a href="#impact" class="nav-link">Impact</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link profile-link">
+                    <i class="fas fa-user"></i>
+                    <span class="points-badge" id="nav-points">0</span>
+                </a></li>
+                <li class="nav-item"><a href="#" class="nav-link logout-link" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <div class="profile-img" id="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Loading...</h3>
+                        <p id="user-level">Level 1 Eco Learner</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="games.html">
+                            <i class="fas fa-gamepad"></i>
+                            <span>Games & Quizzes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="challenges.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>Challenges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="achievements.html">
+                            <i class="fas fa-trophy"></i>
+                            <span>Achievements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="progress.html">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Progress</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="community.html">
+                            <i class="fas fa-users"></i>
+                            <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="rewards.html">
+                            <i class="fas fa-gift"></i>
+                            <span>Redeem Rewards</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="eco-points">
+                    <h4>Your Eco Points</h4>
+                    <div class="points-display" id="user-points">0</div>
+                </div>
+                <button class="btn btn-primary redeem-btn" onclick="window.location.href='rewards.html'">Redeem Rewards</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="welcome-content">
+                    <h1 id="welcome-message">Redeem Your Eco Points</h1>
+                    <p>Exchange your hard-earned points for exciting rewards and make a real impact!</p>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <h3 id="available-points">0 Points</h3>
+                            <p>Available to redeem</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <h2>Filter Rewards</h2>
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="category-filter">Category</label>
+                        <select id="category-filter">
+                            <option value="all">All Categories</option>
+                            <option value="eco">Eco Products</option>
+                            <option value="digital">Digital Rewards</option>
+                            <option value="donation">Donations</option>
+                            <option value="discount">Discount Codes</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="points-filter">Points Range</label>
+                        <select id="points-filter">
+                            <option value="all">All Points</option>
+                            <option value="0-100">0 - 100 Points</option>
+                            <option value="100-500">100 - 500 Points</option>
+                            <option value="500-1000">500 - 1000 Points</option>
+                            <option value="1000+">1000+ Points</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sort-by">Sort By</label>
+                        <select id="sort-by">
+                            <option value="popular">Most Popular</option>
+                            <option value="newest">Newest First</option>
+                            <option value="points-asc">Points: Low to High</option>
+                            <option value="points-desc">Points: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rewards Section -->
+            <section class="rewards-section">
+                <div class="section-header">
+                    <h2>Available Rewards</h2>
+                </div>
+                <div class="rewards-grid" id="rewards-grid">
+                    <!-- Rewards will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Redeemed Rewards Section -->
+            <section class="redeemed-section">
+                <div class="section-header">
+                    <h2>Your Redeemed Rewards</h2>
+                </div>
+                <div class="redeemed-list" id="redeemed-list">
+                    <!-- Redeemed rewards will be loaded dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Redeem Confirmation Modal -->
+    <div class="modal" id="redeemModal">
+        <div class="modal-content">
+            <h2>Confirm Redemption</h2>
+            <p>Are you sure you want to redeem this reward?</p>
+            <div class="reward-details" id="redeem-details">
+                <!-- Reward details will be populated here -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" id="cancel-redeem">Cancel</button>
+                <button class="btn btn-primary" id="confirm-redeem">Redeem Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Redemption Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h2>Redemption Successful!</h2>
+            <p>Your reward has been successfully redeemed.</p>
+            <div class="reward-details" id="success-details">
+                <!-- Reward details will be populated here -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="success-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App and Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6O3gAyio0njhmr7Qz4aDf8Hz0qY2AC3U",
+            authDomain: "ecolearn-4a23f.firebaseapp.com",
+            projectId: "ecolearn-4a23f",
+            storageBucket: "ecolearn-4a23f.firebasestorage.app",
+            messagingSenderId: "626294301194",
+            appId: "1:626294301194:web:dd8882b2e4e7c3da44f5f3",
+            measurementId: "G-S3TNCFCN60"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Check authentication state
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                window.location.href = "login.html";
+                return;
+            }
+            
+            // User is logged in, load their data
+            try {
+                // Get user data from Firestore
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    // Populate dashboard with user data
+                    populateDashboard(user, userData);
+                    initializeRewardsFunctionality(user.uid, userData.points);
+                } else {
+                    console.error("No user data found");
+                    // Create a new user record if it doesn't exist
+                    await createUserRecord(user);
+                    // Load default data
+                    populateDashboard(user, getDefaultUserData());
+                    initializeRewardsFunctionality(user.uid, 0);
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                // Load default data as fallback
+                populateDashboard(user, getDefaultUserData());
+                initializeRewardsFunctionality(user.uid, 0);
+            }
+        });
+
+        // Function to create a new user record
+        async function createUserRecord(user) {
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL || null,
+                    points: 0,
+                    level: 1,
+                    streak: 0,
+                    completedChallenges: 0,
+                    badges: 0,
+                    treesPlanted: 0,
+                    learningTime: 0,
+                    redeemedRewards: []
+                });
+            } catch (error) {
+                console.error("Error creating user record:", error);
+            }
+        }
+
+        // Function to get default user data
+        function getDefaultUserData() {
+            return {
+                points: 0,
+                level: 1,
+                streak: 0,
+                completedChallenges: 0,
+                badges: 0,
+                treesPlanted: 0,
+                learningTime: 0,
+                redeemedRewards: []
+            };
+        }
+
+        // Populate dashboard with user data
+        function populateDashboard(user, userData) {
+            // Set user info
+            document.getElementById('user-name').textContent = user.displayName || user.email;
+            document.getElementById('user-avatar').innerHTML = user.photoURL ? 
+                `<img src="${user.photoURL}" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 50%;">` : 
+                `<i class="fas fa-user"></i>`;
+            
+            // Set user points
+            document.getElementById('user-points').textContent = userData.points;
+            document.getElementById('nav-points').textContent = userData.points;
+            document.getElementById('available-points').textContent = `${userData.points} Points`;
+            
+            // Set user level based on points
+            const userLevel = calculateUserLevel(userData.points);
+            document.getElementById('user-level').textContent = `Level ${userLevel} ${getLevelTitle(userLevel)}`;
+            
+            // Set welcome message
+            const userName = user.displayName || user.email.split('@')[0];
+            document.getElementById('welcome-message').textContent = `Redeem Your Eco Points, ${userName}!`;
+        }
+
+        // Calculate user level based on points
+        function calculateUserLevel(points) {
+            if (points < 100) return 1;
+            if (points < 250) return 2;
+            if (points < 500) return 3;
+            if (points < 1000) return 4;
+            if (points < 2000) return 5;
+            return 6;
+        }
+
+        // Get level title based on level
+        function getLevelTitle(level) {
+            const titles = [
+                'Eco Learner',
+                'Eco Explorer',
+                'Eco Enthusiast',
+                'Eco Warrior',
+                'Eco Champion',
+                'Eco Master'
+            ];
+            return titles[level - 1] || 'Eco Legend';
+        }
+
+        // Initialize rewards functionality
+        function initializeRewardsFunctionality(userId, userPoints) {
+            // Available rewards data
+            const rewards = [
+                {
+                    id: 'eco-bag',
+                    title: 'Eco-Friendly Tote Bag',
+                    description: 'A reusable tote bag made from recycled materials',
+                    points: 250,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This stylish tote bag is made from 100% recycled materials and is perfect for grocery shopping or everyday use.'
+                },
+                {
+                    id: 'tree-plant',
+                    title: 'Plant a Tree',
+                    description: 'Donate to have a tree planted in your name',
+                    points: 500,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1518386523031-13f17f015de5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: true,
+                    details: 'Your points will be donated to our tree planting partner organization. You will receive a certificate with the location of your tree.'
+                },
+                {
+                    id: 'eco-ebook',
+                    title: 'Eco Living E-book',
+                    description: 'A comprehensive guide to sustainable living',
+                    points: 150,
+                    category: 'digital',
+                    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'This 100-page e-book covers everything from reducing waste to sustainable eating habits. Download link will be sent to your email.'
+                },
+                {
+                    id: 'discount-20',
+                    title: '20% Off Eco Store',
+                    description: 'Get 20% off your next purchase at our eco store',
+                    points: 300,
+                    category: 'discount',
+                    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Limited',
+                    popular: false,
+                    details: 'This discount code can be used at our online eco store for any purchase. Valid for 30 days after redemption.'
+                },
+                {
+                    id: 'bamboo-set',
+                    title: 'Bamboo Utensil Set',
+                    description: 'A portable set of bamboo cutlery for on-the-go meals',
+                    points: 400,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This set includes a bamboo spoon, fork, knife, and straw. Comes with a carrying case made from organic cotton.'
+                },
+                {
+                    id: 'ocean-cleanup',
+                    title: 'Ocean Cleanup Donation',
+                    description: 'Donate to support ocean cleanup efforts',
+                    points: 750,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'Your points will be converted to a monetary donation to organizations working to remove plastic from our oceans.'
+                }
+            ];
+
+            // Load rewards
+            loadRewards(rewards, userPoints);
+            
+            // Set up filter functionality
+            setupFilters(rewards, userPoints);
+            
+            // Set up modal functionality
+            setupModals(userId, userPoints);
+            
+            // Load redeemed rewards
+            loadRedeemedRewards(userId);
+        }
+
+        // Load rewards into the grid
+        function loadRewards(rewards, userPoints) {
+            const rewardsGrid = document.getElementById('rewards-grid');
+            rewardsGrid.innerHTML = '';
+            
+            if (rewards.length === 0) {
+                rewardsGrid.innerHTML = '<p>No rewards available at the moment. Check back later!</p>';
+                return;
+            }
+            
+            // Add rewards to the grid
+            rewards.forEach(reward => {
+                const canAfford = userPoints >= reward.points;
+                const rewardCard = document.createElement('div');
+                rewardCard.className = 'reward-card';
+                rewardCard.dataset.id = reward.id;
+                rewardCard.dataset.category = reward.category;
+                rewardCard.dataset.points = reward.points;
+                rewardCard.dataset.popular = reward.popular;
+                
+                rewardCard.innerHTML = `
+                    <div class="reward-image">
+                        <img src="${reward.image}" alt="${reward.title}">
+                        ${reward.popular ? '<span class="reward-badge">Popular</span>' : ''}
+                    </div>
+                    <div class="reward-content">
+                        <h3>${reward.title}</h3>
+                        <p>${reward.description}</p>
+                        <div class="reward-meta">
+                            <div class="points-cost">${reward.points} Points</div>
+                            <div class="reward-availability">${reward.availability}</div>
+                        </div>
+                        <button class="btn ${canAfford ? 'btn-primary' : 'btn-disabled'} redeem-btn" ${!canAfford ? 'disabled' : ''}>
+                            ${canAfford ? 'Redeem Now' : 'Not Enough Points'}
+                        </button>
+                    </div>
+                `;
+                
+                rewardsGrid.appendChild(rewardCard);
+            });
+        }
+
+        // Set up filter functionality
+        function setupFilters(rewards, userPoints) {
+            const categoryFilter = document.getElementById('category-filter');
+            const pointsFilter = document.getElementById('points-filter');
+            const sortBy = document.getElementById('sort-by');
+            
+            const filterFunction = () => {
+                const categoryValue = categoryFilter.value;
+                const pointsValue = pointsFilter.value;
+                const sortValue = sortBy.value;
+                
+                let filteredRewards = [...rewards];
+                
+                // Apply category filter
+                if (categoryValue !== 'all') {
+                    filteredRewards = filteredRewards.filter(reward => reward.category === categoryValue);
+                }
+                
+                // Apply points filter
+                if (pointsValue !== 'all') {
+                    if (pointsValue === '0-100') {
+                        filteredRewards = filteredRewards.filter(reward => reward.points <= 100);
+                    } else if (pointsValue === '100-500') {
+                        filteredRewards = filteredRewards.filter(reward => reward.points > 100 && reward.points <= 500);
+                    } else if (pointsValue === '500-1000') {
+                        filteredRewards = filteredRewards.filter(reward => reward.points > 500 && reward.points <= 1000);
+                    } else if (pointsValue === '1000+') {
+                        filteredRewards = filteredRewards.filter(reward => reward.points > 1000);
+                    }
+                }
+                
+                // Apply sorting
+                if (sortValue === 'popular') {
+                    filteredRewards.sort((a, b) => b.popular - a.popular);
+                } else if (sortValue === 'newest') {
+                    // Assuming newer rewards are added at the end of the array
+                    filteredRewards.reverse();
+                } else if (sortValue === 'points-asc') {
+                    filteredRewards.sort((a, b) => a.points - b.points);
+                } else if (sortValue === 'points-desc') {
+                    filteredRewards.sort((a, b) => b.points - a.points);
+                }
+                
+                // Load filtered rewards
+                loadRewards(filteredRewards, userPoints);
+                
+                // Reattach event listeners to the new redeem buttons
+                attachRedeemListeners();
+            };
+            
+            categoryFilter.addEventListener('change', filterFunction);
+            pointsFilter.addEventListener('change', filterFunction);
+            sortBy.addEventListener('change', filterFunction);
+        }
+
+        // Set up modal functionality
+        function setupModals(userId, userPoints) {
+            const redeemModal = document.getElementById('redeemModal');
+            const successModal = document.getElementById('successModal');
+            const cancelRedeemBtn = document.getElementById('cancel-redeem');
+            const confirmRedeemBtn = document.getElementById('confirm-redeem');
+            const successOkBtn = document.getElementById('success-ok');
+            
+            let selectedReward = null;
+            
+            // Attach event listeners to redeem buttons
+            attachRedeemListeners();
+            
+            function attachRedeemListeners() {
+                document.querySelectorAll('.redeem-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        if (this.disabled) return;
+                        
+                        const rewardCard = this.closest('.reward-card');
+                        const rewardId = rewardCard.dataset.id;
+                        
+                        // Find the selected reward
+                        selectedReward = getRewardById(rewardId);
+                        
+                        if (selectedReward) {
+                            // Show redemption confirmation modal
+                            document.getElementById('redeem-details').innerHTML = `
+                                <h4>${selectedReward.title}</h4>
+                                <p>${selectedReward.details}</p>
+                                <ul>
+                                    <li><strong>Cost:</strong> ${selectedReward.points} Points</li>
+                                    <li><strong>Your Balance:</strong> ${userPoints} Points</li>
+                                    <li><strong>After Redemption:</strong> ${userPoints - selectedReward.points} Points</li>
+                                </ul>
+                            `;
+                            
+                            redeemModal.style.display = 'flex';
+                        }
+                    });
+                });
+            }
+            
+            // Cancel redemption
+            cancelRedeemBtn.addEventListener('click', function() {
+                redeemModal.style.display = 'none';
+                selectedReward = null;
+            });
+            
+            // Confirm redemption
+            confirmRedeemBtn.addEventListener('click', async function() {
+                if (!selectedReward) return;
+                
+                try {
+                    // Update user points in Firestore
+                    const newPoints = userPoints - selectedReward.points;
+                    await db.collection('users').doc(userId).update({
+                        points: newPoints,
+                        redeemedRewards: firebase.firestore.FieldValue.arrayUnion({
+                            id: selectedReward.id,
+                            title: selectedReward.title,
+                            points: selectedReward.points,
+                            date: new Date().toISOString(),
+                            status: 'pending'
+                        })
+                    });
+                    
+                    // Update UI
+                    document.getElementById('user-points').textContent = newPoints;
+                    document.getElementById('nav-points').textContent = newPoints;
+                    document.getElementById('available-points').textContent = `${newPoints} Points`;
+                    
+                    // Show success modal
+                    document.getElementById('success-details').innerHTML = `
+                        <h4>${selectedReward.title}</h4>
+                        <p>You've successfully redeemed this reward for ${selectedReward.points} points.</p>
+                        <ul>
+                            <li><strong>New Balance:</strong> ${newPoints} Points</li>
+                            <li><strong>Status:</strong> Pending</li>
+                        </ul>
+                    `;
+                    
+                    redeemModal.style.display = 'none';
+                    successModal.style.display = 'flex';
+                    
+                    // Reload redeemed rewards
+                    loadRedeemedRewards(userId);
+                    
+                    // Update the rewards grid with new points value
+                    loadRewards(getAllRewards(), newPoints);
+                    setupFilters(getAllRewards(), newPoints);
+                    
+                } catch (error) {
+                    console.error("Error redeeming reward:", error);
+                    alert("There was an error redeeming your reward. Please try again.");
+                }
+            });
+            
+            // Close success modal
+            successOkBtn.addEventListener('click', function() {
+                successModal.style.display = 'none';
+                selectedReward = null;
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === redeemModal) {
+                    redeemModal.style.display = 'none';
+                    selectedReward = null;
+                }
+                if (event.target === successModal) {
+                    successModal.style.display = 'none';
+                    selectedReward = null;
+                }
+            });
+        }
+
+        // Get reward by ID
+        function getRewardById(id) {
+            // This would typically come from a database
+            const rewards = [
+                {
+                    id: 'eco-bag',
+                    title: 'Eco-Friendly Tote Bag',
+                    description: 'A reusable tote bag made from recycled materials',
+                    points: 250,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This stylish tote bag is made from 100% recycled materials and is perfect for grocery shopping or everyday use.'
+                },
+                {
+                    id: 'tree-plant',
+                    title: 'Plant a Tree',
+                    description: 'Donate to have a tree planted in your name',
+                    points: 500,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1518386523031-13f17f015de5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: true,
+                    details: 'Your points will be donated to our tree planting partner organization. You will receive a certificate with the location of your tree.'
+                },
+                {
+                    id: 'eco-ebook',
+                    title: 'Eco Living E-book',
+                    description: 'A comprehensive guide to sustainable living',
+                    points: 150,
+                    category: 'digital',
+                    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'This 100-page e-book covers everything from reducing waste to sustainable eating habits. Download link will be sent to your email.'
+                },
+                {
+                    id: 'discount-20',
+                    title: '20% Off Eco Store',
+                    description: 'Get 20% off your next purchase at our eco store',
+                    points: 300,
+                    category: 'discount',
+                    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Limited',
+                    popular: false,
+                    details: 'This discount code can be used at our online eco store for any purchase. Valid for 30 days after redemption.'
+                },
+                {
+                    id: 'bamboo-set',
+                    title: 'Bamboo Utensil Set',
+                    description: 'A portable set of bamboo cutlery for on-the-go meals',
+                    points: 400,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This set includes a bamboo spoon, fork, knife, and straw. Comes with a carrying case made from organic cotton.'
+                },
+                {
+                    id: 'ocean-cleanup',
+                    title: 'Ocean Cleanup Donation',
+                    description: 'Donate to support ocean cleanup efforts',
+                    points: 750,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'Your points will be converted to a monetary donation to organizations working to remove plastic from our oceans.'
+                }
+            ];
+            
+            return rewards.find(reward => reward.id === id);
+        }
+
+        // Get all rewards
+        function getAllRewards() {
+            return [
+                {
+                    id: 'eco-bag',
+                    title: 'Eco-Friendly Tote Bag',
+                    description: 'A reusable tote bag made from recycled materials',
+                    points: 250,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This stylish tote bag is made from 100% recycled materials and is perfect for grocery shopping or everyday use.'
+                },
+                {
+                    id: 'tree-plant',
+                    title: 'Plant a Tree',
+                    description: 'Donate to have a tree planted in your name',
+                    points: 500,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1518386523031-13f17f015de5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: true,
+                    details: 'Your points will be donated to our tree planting partner organization. You will receive a certificate with the location of your tree.'
+                },
+                {
+                    id: 'eco-ebook',
+                    title: 'Eco Living E-book',
+                    description: 'A comprehensive guide to sustainable living',
+                    points: 150,
+                    category: 'digital',
+                    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'This 100-page e-book covers everything from reducing waste to sustainable eating habits. Download link will be sent to your email.'
+                },
+                {
+                    id: 'discount-20',
+                    title: '20% Off Eco Store',
+                    description: 'Get 20% off your next purchase at our eco store',
+                    points: 300,
+                    category: 'discount',
+                    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Limited',
+                    popular: false,
+                    details: 'This discount code can be used at our online eco store for any purchase. Valid for 30 days after redemption.'
+                },
+                {
+                    id: 'bamboo-set',
+                    title: 'Bamboo Utensil Set',
+                    description: 'A portable set of bamboo cutlery for on-the-go meals',
+                    points: 400,
+                    category: 'eco',
+                    image: 'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'In Stock',
+                    popular: true,
+                    details: 'This set includes a bamboo spoon, fork, knife, and straw. Comes with a carrying case made from organic cotton.'
+                },
+                {
+                    id: 'ocean-cleanup',
+                    title: 'Ocean Cleanup Donation',
+                    description: 'Donate to support ocean cleanup efforts',
+                    points: 750,
+                    category: 'donation',
+                    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    availability: 'Unlimited',
+                    popular: false,
+                    details: 'Your points will be converted to a monetary donation to organizations working to remove plastic from our oceans.'
+                }
+            ];
+        }
+
+        // Load redeemed rewards
+        async function loadRedeemedRewards(userId) {
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const redeemedList = document.getElementById('redeemed-list');
+                    redeemedList.innerHTML = '';
+                    
+                    if (!userData.redeemedRewards || userData.redeemedRewards.length === 0) {
+                        redeemedList.innerHTML = '<p>You haven\'t redeemed any rewards yet.</p>';
+                        return;
+                    }
+                    
+                    // Add redeemed rewards to the list
+                    userData.redeemedRewards.forEach(reward => {
+                        const redeemedItem = document.createElement('div');
+                        redeemedItem.className = 'redeemed-item';
+                        
+                        // Determine icon based on reward category
+                        let iconClass = 'fa-gift';
+                        if (reward.id.includes('tree') || reward.id.includes('donation') || reward.id.includes('ocean')) {
+                            iconClass = 'fa-seedling';
+                        } else if (reward.id.includes('ebook') || reward.id.includes('digital')) {
+                            iconClass = 'fa-book';
+                        } else if (reward.id.includes('discount')) {
+                            iconClass = 'fa-tag';
+                        }
+                        
+                        redeemedItem.innerHTML = `
+                            <div class="redeemed-icon">
+                                <i class="fas ${iconClass}"></i>
+                            </div>
+                            <div class="redeemed-content">
+                                <h4>${reward.title}</h4>
+                                <p>Redeemed for ${reward.points} points</p>
+                                <span class="redeemed-date">${new Date(reward.date).toLocaleDateString()}</span>
+                            </div>
+                            <div class="redeemed-status status-${reward.status}">
+                                ${reward.status}
+                            </div>
+                        `;
+                        
+                        redeemedList.appendChild(redeemedItem);
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading redeemed rewards:", error);
+            }
+        }
+
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+    
+            e.preventDefault();
+            
+            auth.signOut().then(() => {
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Logout error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

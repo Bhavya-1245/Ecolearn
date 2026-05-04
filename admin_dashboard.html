@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLearn - Organization Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-light: #80e27e;
+            --primary-dark: #087f23;
+            --secondary: #FF9800;
+            --secondary-light: #ffc947;
+            --secondary-dark: #c66900;
+            --accent: #2196F3;
+            --accent-light: #6ec6ff;
+            --accent-dark: #0069c0;
+            --text: #263238;
+            --text-light: #78909c;
+            --background: #f9fbe7;
+            --surface: #ffffff;
+            --error: #f44336;
+            --success: #66bb6a;
+            --warning: #ffa726;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--background);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .nav-logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin-left: 1.5rem;
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-light);
+        }
+
+        .points-badge {
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            margin-left: 6px;
+        }
+
+        .logout-link {
+            color: #e53935 !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--surface);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--background);
+        }
+
+        .organization-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .org-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            background-color: var(--background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .org-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .org-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .org-selector {
+            margin-top: 1rem;
+        }
+
+        .org-selector select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--background);
+            background-color: var(--surface);
+            color: var(--text);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav .nav-item {
+            margin: 0;
+        }
+
+        .sidebar-nav .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-nav .nav-item a i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav .nav-item a:hover {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-nav .nav-item.active a {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--background);
+        }
+
+        .org-stats h4 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-content h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .welcome-content p {
+            opacity: 0.9;
+        }
+
+        .welcome-stats {
+            display: flex;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--primary-dark);
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-overview .stat {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        /* Student Performance */
+        .student-performance {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .performance-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--background);
+            background-color: var(--surface);
+            color: var(--text);
+        }
+
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--background);
+        }
+
+        .performance-table th {
+            background-color: var(--background);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .performance-table tr:hover {
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--background);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Activities Management */
+        .activities-management {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .activities-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .activity-card {
+            background: var(--background);
+            border-radius: 10px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .activity-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .activity-card p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .participants {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .activity-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(102, 187, 106, 0.2);
+            color: var(--success);
+        }
+
+        .status-upcoming {
+            background: rgba(255, 167, 38, 0.2);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+
+        .activity-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .edit-btn {
+            background-color: var(--accent-light);
+            color: var(--accent-dark);
+        }
+
+        .delete-btn {
+            background-color: #ffebee;
+            color: var(--error);
+        }
+
+        /* Add Activity Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--background);
+            border-radius: 6px;
+            background-color: var(--surface);
+            color: var(--text);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                display: flex;
+                flex-direction: column;
+                background-color: var(--primary);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 1.5rem 0;
+            }
+            
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .performance-filters {
+                flex-direction: column;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stat-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>EcoLearn</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+                <li class="nav-item"><a href="#games" class="nav-link">Games & Quizzes</a></li>
+                <li class="nav-item"><a href="#impact" class="nav-link">Impact</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="profile.html" class="nav-link profile-link">
+                    <i class="fas fa-user"></i>
+                    <span class="points-badge" id="nav-points">Admin</span>
+                </a></li>
+                <li class="nav-item"><a href="#" class="nav-link logout-link" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="organization-profile">
+                    <div class="org-img">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="org-info">
+                        <h3 id="org-name">Green University</h3>
+                        <p>Organization Admin</p>
+                    </div>
+                </div>
+                <div class="org-selector">
+                    <select id="organization-select">
+                        <option value="green-university">Green University</option>
+                        <option value="eco-college">Eco College</option>
+                        <option value="sustainability-institute">Sustainability Institute</option>
+                        <option value="environment-org">Environment Organization</option>
+                    </select>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Performance Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-users"></i>
+                            <span>Student Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-tasks"></i>
+                            <span>Activities</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-trophy"></i>
+                            <span>Achievements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">
+                            <i class="fas fa-file-export"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="org-stats">
+                    <h4>Total Eco Points</h4>
+                    <div class="stats-display" id="total-org-points">12,458</div>
+                    <button class="btn btn-primary">Generate Report</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="welcome-content">
+                    <h1 id="welcome-message">Welcome, Green University!</h1>
+                    <p>Track your organization's environmental impact and student engagement.</p>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>
+                            <h3 id="student-count">1,245</h3>
+                            <p>Active Students</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="stats-overview">
+                <div class="stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completed-activities">48</h3>
+                        <p>Completed Activities</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="participation-rate">72%</h3>
+                        <p>Participation Rate</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="co2-reduced">5.2T</h3>
+                        <p>CO₂ Reduced</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="waste-reduced">3.8T</h3>
+                        <p>Waste Reduced</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Student Performance -->
+            <section class="student-performance">
+                <div class="section-header">
+                    <h2>Student Performance</h2>
+                    <a href="#" class="view-all">View Full Report</a>
+                </div>
+                
+                <div class="performance-filters">
+                    <div class="filter-group">
+                        <label for="department-filter">Department</label>
+                        <select id="department-filter">
+                            <option value="all">All Departments</option>
+                            <option value="science">Science</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="arts">Arts</option>
+                            <option value="business">Business</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="year-filter">Academic Year</label>
+                        <select id="year-filter">
+                            <option value="2023">2023-2024</option>
+                            <option value="2022">2022-2023</option>
+                            <option value="2021">2021-2022</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sort-by">Sort By</label>
+                        <select id="sort-by">
+                            <option value="points">Eco Points</option>
+                            <option value="activities">Activities Completed</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="performance-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Department</th>
+                                <th>Eco Points</th>
+                                <th>Activities Completed</th>
+                                <th>Participation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <!-- Student data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Activities Management -->
+            <section class="activities-management">
+                <div class="activities-header">
+                    <h2>Environmental Activities</h2>
+                    <button class="btn btn-primary" id="add-activity-btn">Add New Activity</button>
+                </div>
+                
+                <div class="activities-grid">
+                    <div class="activity-card">
+                        <h3>Campus Cleanup Drive</h3>
+                        <p>Organize a campus-wide cleanup event to promote waste management awareness.</p>
+                        <div class="activity-meta">
+                            <span class="participants">128 participants</span>
+                            <span class="activity-status status-active">Active</span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn delete-btn">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <h3>Recycling Workshop</h3>
+                        <p>Educational workshop on proper recycling techniques and their environmental impact.</p>
+                        <div class="activity-meta">
+                            <span class="participants">95 participants</span>
+                            <span class="activity-status status-upcoming">Upcoming</span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn delete-btn">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <h3>Tree Planting Initiative</h3>
+                        <p>Plant native trees around campus to increase green cover and biodiversity.</p>
+                        <div class="activity-meta">
+                            <span class="participants">210 participants</span>
+                            <span class="activity-status status-completed">Completed</span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn delete-btn">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <h3>Energy Conservation Challenge</h3>
+                        <p>Two-week challenge to reduce energy consumption in campus buildings.</p>
+                        <div class="activity-meta">
+                            <span class="participants">175 participants</span>
+                            <span class="activity-status status-active">Active</span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Activity Modal -->
+    <div class="modal" id="add-activity-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Activity</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="activity-form">
+                <div class="form-group">
+                    <label for="activity-name">Activity Name</label>
+                    <input type="text" id="activity-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="activity-description">Description</label>
+                    <textarea id="activity-description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="activity-category">Category</label>
+                    <select id="activity-category" required>
+                        <option value="">Select Category</option>
+                        <option value="cleanup">Cleanup Drive</option>
+                        <option value="recycling">Recycling</option>
+                        <option value="conservation">Conservation</option>
+                        <option value="education">Education</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="activity-date">Date</label>
+                    <input type="date" id="activity-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="activity-location">Location</label>
+                    <input type="text" id="activity-location" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-activity">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Activity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simulated database for universities and their students
+        const universityDatabase = {
+            'green-university': {
+                name: 'Green University',
+                stats: {
+                    points: '12,458',
+                    students: '1,245',
+                    activities: '48',
+                    participation: '72%',
+                    co2Reduced: '5.2T',
+                    wasteReduced: '3.8T'
+                },
+                students: [
+                    { name: 'Sarah Johnson', department: 'Environmental Science', points: 1245, activities: 18, participation: 90 },
+                    { name: 'Michael Chen', department: 'Engineering', points: 987, activities: 15, participation: 75 },
+                    { name: 'Emma Rodriguez', department: 'Business', points: 845, activities: 12, participation: 68 },
+                    { name: 'James Wilson', department: 'Arts', points: 723, activities: 10, participation: 62 },
+                    { name: 'Olivia Martin', department: 'Science', points: 654, activities: 8, participation: 55 },
+                    { name: 'Noah Anderson', department: 'Environmental Science', points: 598, activities: 7, participation: 52 },
+                    { name: 'Sophia Lee', department: 'Engineering', points: 521, activities: 6, participation: 48 }
+                ]
+            },
+            'eco-college': {
+                name: 'Eco College',
+                stats: {
+                    points: '8,732',
+                    students: '876',
+                    activities: '32',
+                    participation: '65%',
+                    co2Reduced: '3.1T',
+                    wasteReduced: '2.4T'
+                },
+                students: [
+                    { name: 'Liam Garcia', department: 'Environmental Science', points: 987, activities: 14, participation: 82 },
+                    { name: 'Isabella Martinez', department: 'Business', points: 845, activities: 12, participation: 75 },
+                    { name: 'Ethan Brown', department: 'Science', points: 732, activities: 10, participation: 68 },
+                    { name: 'Mia Johnson', department: 'Arts', points: 654, activities: 9, participation: 62 },
+                    { name: 'Lucas Smith', department: 'Engineering', points: 587, activities: 8, participation: 58 }
+                ]
+            },
+            'sustainability-institute': {
+                name: 'Sustainability Institute',
+                stats: {
+                    points: '15,321',
+                    students: '1,532',
+                    activities: '56',
+                    participation: '78%',
+                    co2Reduced: '6.8T',
+                    wasteReduced: '4.2T'
+                },
+                students: [
+                    { name: 'Amelia Wilson', department: 'Environmental Science', points: 1542, activities: 20, participation: 92 },
+                    { name: 'Benjamin Taylor', department: 'Engineering', points: 1321, activities: 18, participation: 85 },
+                    { name: 'Charlotte Davis', department: 'Science', points: 1187, activities: 16, participation: 78 },
+                    { name: 'Henry Miller', department: 'Business', points: 1045, activities: 14, participation: 72 },
+                    { name: 'Evelyn Clark', department: 'Arts', points: 932, activities: 12, participation: 68 },
+                    { name: 'Alexander White', department: 'Environmental Science', points: 845, activities: 11, participation: 64 },
+                    { name: 'Harper Lewis', department: 'Engineering', points: 765, activities: 10, participation: 60 }
+                ]
+            },
+            'environment-org': {
+                name: 'Environment Organization',
+                stats: {
+                    points: '23,876',
+                    students: '2,154',
+                    activities: '72',
+                    participation: '82%',
+                    co2Reduced: '9.5T',
+                    wasteReduced: '6.3T'
+                },
+                students: [
+                    { name: 'Daniel Harris', department: 'Environmental Science', points: 1987, activities: 24, participation: 95 },
+                    { name: 'Ella Walker', department: 'Engineering', points: 1765, activities: 21, participation: 88 },
+                    { name: 'Jackson King', department: 'Science', points: 1623, activities: 19, participation: 82 },
+                    { name: 'Sofia Scott', department: 'Business', points: 1487, activities: 17, participation: 78 },
+                    { name: 'Aiden Young', department: 'Arts', points: 1345, activities: 15, participation: 72 },
+                    { name: 'Scarlett Green', department: 'Environmental Science', points: 1234, activities: 14, participation: 68 },
+                    { name: 'Logan Hall', department: 'Engineering', points: 1123, activities: 13, participation: 65 },
+                    { name: 'Chloe Adams', department: 'Science', points: 987, activities: 12, participation: 62 }
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Organization selector
+            const orgSelect = document.getElementById('organization-select');
+            const orgName = document.getElementById('org-name');
+            const welcomeMessage = document.getElementById('welcome-message');
+            
+            // Initial load
+            loadUniversityData('green-university');
+            
+            orgSelect.addEventListener('change', function() {
+                const selectedUniversityId = this.value;
+                loadUniversityData(selectedUniversityId);
+            });
+            
+            // Add activity modal
+            const addActivityBtn = document.getElementById('add-activity-btn');
+            const addActivityModal = document.getElementById('add-activity-modal');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const cancelActivityBtn = document.getElementById('cancel-activity');
+            const activityForm = document.getElementById('activity-form');
+            
+            addActivityBtn.addEventListener('click', function() {
+                addActivityModal.style.display = 'flex';
+            });
+            
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelActivityBtn.addEventListener('click', closeModal);
+            
+            activityForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real application, you would save the activity data to your backend
+                alert('Activity added successfully!');
+                closeModal();
+                
+                // Reset form
+                activityForm.reset();
+            });
+            
+            function closeModal() {
+                addActivityModal.style.display = 'none';
+            }
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === addActivityModal) {
+                    closeModal();
+                }
+            });
+            
+            // Mobile menu toggle
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Function to load university data
+            function loadUniversityData(universityId) {
+                const university = universityDatabase[universityId];
+                
+                if (!university) return;
+                
+                // Update UI with university data
+                orgName.textContent = university.name;
+                welcomeMessage.textContent = `Welcome, ${university.name}!`;
+                
+                // Update statistics
+                document.getElementById('total-org-points').textContent = university.stats.points;
+                document.getElementById('student-count').textContent = university.stats.students;
+                document.getElementById('completed-activities').textContent = university.stats.activities;
+                document.getElementById('participation-rate').textContent = university.stats.participation;
+                document.getElementById('co2-reduced').textContent = university.stats.co2Reduced;
+                document.getElementById('waste-reduced').textContent = university.stats.wasteReduced;
+                
+                // Update student table
+                populateStudentTable(university.students);
+            }
+            
+            // Function to populate student table
+            function populateStudentTable(students) {
+                const tableBody = document.getElementById('students-table-body');
+                tableBody.innerHTML = '';
+                
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.department}</td>
+                        <td>${student.points.toLocaleString()}</td>
+                        <td>${student.activities}</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${student.participation}%"></div>
+                            </div>
+                            <small>${student.participation}%</small>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Filter functionality
+            const departmentFilter = document.getElementById('department-filter');
+            const sortByFilter = document.getElementById('sort-by');
+            
+            departmentFilter.addEventListener('change', filterStudents);
+            sortByFilter.addEventListener('change', filterStudents);
+            
+            function filterStudents() {
+                const currentUniversityId = document.getElementById('organization-select').value;
+                const university = universityDatabase[currentUniversityId];
+                const department = departmentFilter.value;
+                const sortBy = sortByFilter.value;
+                
+                let filteredStudents = [...university.students];
+                
+                // Filter by department
+                if (department !== 'all') {
+                    filteredStudents = filteredStudents.filter(student => 
+                        student.department.toLowerCase().includes(department.toLowerCase()));
+                }
+                
+                // Sort students
+                filteredStudents.sort((a, b) => {
+                    if (sortBy === 'points') {
+                        return b.points - a.points;
+                    } else if (sortBy === 'activities') {
+                        return b.activities - a.activities;
+                    } else if (sortBy === 'name') {
+                        return a.name.localeCompare(b.name);
+                    }
+                    return 0;
+                });
+                
+                // Update table
+                populateStudentTable(filteredStudents);
+            }
+        });
+    </script>
+</body>
+</html>
